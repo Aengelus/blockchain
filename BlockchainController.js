@@ -4,6 +4,9 @@
  * This class expose the endpoints that the client applications will use to interact with the 
  * Blockchain dataset
  */
+
+// Take care, for signing the message with Bitcoin Core, you need to create a P2PKH address
+//      getnewaddress "YourAddressLabelHere" "legacy"
 class BlockchainController {
 
     //The constructor receive the instance of the express.js app and the Blockchain class
@@ -42,6 +45,8 @@ class BlockchainController {
             if(req.body.address) {
                 const address = req.body.address;
                 const message = await this.blockchain.requestMessageOwnershipVerification(address);
+                console.log(address);
+                console.log(message);
                 if(message){
                     return res.status(200).json(message);
                 } else {
@@ -53,7 +58,7 @@ class BlockchainController {
         });
     }
 
-    // Endpoint that allow Submit a Star, yu need first to `requestOwnership` to have the message (POST endpoint)
+    // Endpoint that allow Submit a Star, you need first to `requestOwnership` to have the message (POST endpoint)
     submitStar() {
         this.app.post("/submitstar", async (req, res) => {
             if(req.body.address && req.body.message && req.body.signature && req.body.star) {
